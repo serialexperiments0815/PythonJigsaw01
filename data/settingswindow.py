@@ -54,7 +54,6 @@ class SettingsWindow(QDialog):
 
 
     def updateSliderValue(self, value):
-        print(value)
         snapped = 2 * round(value / 2)
         self.sliderText.setText(f"Number of puzzle pieces: {snapped}")
 

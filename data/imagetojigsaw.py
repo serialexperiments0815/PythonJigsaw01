@@ -40,11 +40,6 @@ class JigsawPiece(QGraphicsPixmapItem):
 
         JigsawPiece.allPieces.append(self)
 
-    def mousePressEvent(self, event):
-        if event.button() == Qt.LeftButton:
-            
-            print("Momentane Position: {", self.getPositionX() , " - ", self.getPositionY(), "} Piece number: ", self.number, " Row: ", self.row, " Col: ", self.col, " Starting pos:", self.startPos)
-
     def mouseMoveEvent(self, event):
         if event.buttons() == Qt.LeftButton and self.pos():
             delta = self.mapToParent(event.pos()) - self.pos()
@@ -54,10 +49,6 @@ class JigsawPiece(QGraphicsPixmapItem):
 
     def mouseReleaseEvent(self, event):
         if event.button() == Qt.LeftButton:
-            neighbors = self.getDistanceToNeighborPieces()
-            print(len(JigsawPiece.allPieces))
-            for item in neighbors:
-                print(f"Neighbor {item[0]} {item[3]}: distance x{item[1]}. y{item[2]}")
             self.checkPieceCluster()
 
     def getPositionX(self):
@@ -122,9 +113,7 @@ class PuzzleWindow(QGraphicsScene):
 
         self.filePath = filePath
         self.rows = rows
-        print("ROWS: ", self.rows-1)
         self.cols = cols
-        print("COLS: ", self.cols-1)
         if (filePath != None):
 
             self.createPuzzle(rows, cols)
@@ -157,8 +146,6 @@ class PuzzleWindow(QGraphicsScene):
                     qimage = QImage(data, width, height, 3 * width, QImage.Format_RGB888)  
                     pixmap = QPixmap.fromImage(qimage)
                     piece = JigsawPiece(pixmap, (j*pieceW, i*pieceH), i, j)
-                    print(f"Piecenumber: {piece.number} | Row: {i} Col: {j} | H: {pieceImg.height} W: {pieceImg.width}")
-
                     piece.setPos(random.randint(0, w-pieceW), random.randint(0, h-pieceH))                    
                     self.addItem(piece)
                     piece.setPos(random.randint(1, int(self.width()-pieceW)), random.randint(1, int(self.height()-pieceH)))
