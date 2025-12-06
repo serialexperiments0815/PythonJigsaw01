@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         leftLayout.setContentsMargins(0, 0, 0, 0)
         leftLayout.setSpacing(5)
 
-        self.scene = PuzzleWindow(None, self.settingsWindow.piecesToGrid(self.settings.getData("puzzlePieces"))[0], self.settingsWindow.piecesToGrid(self.settings.getData("puzzlePieces"))[1])
+        self.scene = PuzzleWindow(None, self.settingsWindow.getGridRows(), self.settingsWindow.getGridCols())
         self.view = QGraphicsView(self.scene)
         self.view.setStyleSheet(f"background-color: {self.settings.getData("color")}; border: 1px solid black;")
         leftLayout.addWidget(self.view)
@@ -51,8 +51,8 @@ class MainWindow(QMainWindow):
         addImageAction = puzzleMenu.addAction("Add Image")
         selectedImage = addImageAction.triggered.connect(lambda: self.handlerInput("image"))
         
-        addFolderAction = puzzleMenu.addAction("Add Folder")
-        selectedFolder = addFolderAction.triggered.connect(lambda: self.handlerInput("folder"))
+        #addFolderAction = puzzleMenu.addAction("Add Folder")
+        #selectedFolder = addFolderAction.triggered.connect(lambda: self.handlerInput("folder"))
         
         puzzleAction.setMenu(puzzleMenu)
         
@@ -71,13 +71,12 @@ class MainWindow(QMainWindow):
             selectedImage = self.imageConversion.openImageFile()
             if selectedImage:
                 self.constructPuzzle(selectedImage)
-        elif typeInput == "folder":
-            selectedFolder = self.imageConversion.openFolder()
-            if selectedFolder:
-                self.constructPuzzle(selectedFolder)
-
+        #elif typeInput == "folder":
+        #    selectedFolder = self.imageConversion.openFolder()
+        #    if selectedFolder:
+        #        self.constructPuzzle(selectedFolder)
 
     def constructPuzzle(self, input):
-        print(input)
-        self.scene = PuzzleWindow(input, self.settingsWindow.piecesToGrid(self.settings.getData("puzzlePieces"))[0], self.settingsWindow.piecesToGrid(self.settings.getData("puzzlePieces"))[1])
+        self.scene = PuzzleWindow(input, self.settingsWindow.getGridRows(), self.settingsWindow.getGridCols())
         self.view.setScene(self.scene)
+    

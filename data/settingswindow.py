@@ -73,3 +73,9 @@ class SettingsWindow(QDialog):
         cols = math.ceil(math.sqrt(totalPieces))
         rows = math.ceil(totalPieces / cols)
         return rows, cols
+    
+    def getGridRows(self):
+        return self.piecesToGrid(self.settings.getData("puzzlePieces"))[0]
+
+    def getGridCols(self):
+        return self.piecesToGrid(self.settings.getData("puzzlePieces"))[1]
