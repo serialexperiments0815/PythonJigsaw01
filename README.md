@@ -1,7 +1,7 @@
-# PythonJigsaw01 🎯
+# PythonJigsaw01 
 
 A simple jigsaw puzzle game built with Python, PyQt5, and Pillow.  
-Load any image (below a certain size), split it into pieces, and manually assemble them - pieces snap together and cluster when placed near each other.
+Load any image (below 800x800 size), split it into pieces, and manually assemble them - pieces snap together and cluster when placed near each other.
 
 ---
 
