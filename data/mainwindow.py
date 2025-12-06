@@ -8,6 +8,9 @@ from data.imageconversion import ImageConversion
 
 class MainWindow(QMainWindow):
     def __init__(self):
+
+
+
         self.settings = JSONHandling()
         self.settingsWindow = SettingsWindow()
         self.imageConversion = ImageConversion()

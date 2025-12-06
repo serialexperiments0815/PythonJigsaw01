@@ -12,9 +12,10 @@ class JigsawPiece(QGraphicsPixmapItem):
     number = 0
     allPieces = []
 
+
     def __init__(self, pixmap, startPos, resultRow, resultCol):
         super().__init__()
-    
+
         self.setPixmap(pixmap)
 
         if(startPos != (0,0)):
@@ -28,6 +29,9 @@ class JigsawPiece(QGraphicsPixmapItem):
 
         JigsawPiece.number += 1
         self.number = JigsawPiece.number
+
+        self.width = self.pixmap().width()
+        self.height = self.pixmap().height()
 
         self.row = resultRow
         self.col = resultCol
@@ -57,10 +61,10 @@ class JigsawPiece(QGraphicsPixmapItem):
             self.checkPieceCluster()
 
     def getPositionX(self):
-        return self.pos().x()
+        return self.pos().x() 
     
     def getPositionY(self):
-        return self.pos().y()
+        return self.pos().y() 
     
     def getNeighbors(self):
         neighbors = []
@@ -79,20 +83,26 @@ class JigsawPiece(QGraphicsPixmapItem):
 
     def getDistanceToNeighborPieces(self):
         neighbors = self.getNeighbors()
+        
         neighborDistances = [[neighbor, neighbor.getPositionX() - self.getPositionX(), neighbor.getPositionY() - self.getPositionY(), direction] for neighbor, direction in neighbors]
         return neighborDistances
 
     def checkPieceCluster(self):
+        snapTolerance = 10
         distanceCheck = self.getDistanceToNeighborPieces()
         for neighbor, dx, dy, direction in distanceCheck:
-            if direction == "right" and dx <= 150 and dx >= 110 and dy >= -5 and dy <= 5:
-                self.setPieceCluster(neighbor)
-            if(direction == "down" and dy <= 165 and dy >= 150 and dx >= -5 and dx <= 5):
-                self.setPieceCluster(neighbor)
-            if(direction == "left" and dx >= -125 and dx <= -100 and dy >= -5 and dy <= 5):
-                self.setPieceCluster(neighbor)
-            if(direction == "up" and dy <= -150 and dy >= -160 and dx >= -5 and dx <= 5):
-                self.setPieceCluster(neighbor)
+            if direction == "right":
+                if abs(dx - self.width) <= snapTolerance and abs(dy) <= snapTolerance:
+                    self.setPieceCluster(neighbor)
+            elif direction == "left":
+                if abs(dx + self.width) <= snapTolerance and abs(dy) <= snapTolerance:
+                    self.setPieceCluster(neighbor)
+            elif direction == "down":
+                if abs(dy - self.height) <= snapTolerance and abs(dx) <= snapTolerance:
+                    self.setPieceCluster(neighbor)
+            elif direction == "up":
+                if abs(dy + self.height) <= snapTolerance and abs(dx) <= snapTolerance:
+                    self.setPieceCluster(neighbor)
             
 
     def setPieceCluster(self, neighbor):   
@@ -103,6 +113,13 @@ class JigsawPiece(QGraphicsPixmapItem):
 class PuzzleWindow(QGraphicsScene):
     def __init__(self, filePath, rows, cols):
         super().__init__()
+
+        for piece in JigsawPiece.allPieces:
+            if piece.scene() is not None:
+                piece.scene().removeItem(piece)
+        JigsawPiece.allPieces.clear()
+        JigsawPiece.number = 0
+
         self.filePath = filePath
         self.rows = rows
         print("ROWS: ", self.rows-1)
